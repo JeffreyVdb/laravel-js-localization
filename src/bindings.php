@@ -1,7 +1,8 @@
 <?php
 
-use JsLocalization\CachingService;
-use JsLocalization\Helper;
+use JeffreyVdb\JsLocalization\CachingService;
+use JeffreyVdb\JsLocalization\Helper;
+use JeffreyVdb\JsLocalization\Output;
 
 App::singleton('JsLocalizationHelper', function()
 {
@@ -11,4 +12,9 @@ App::singleton('JsLocalizationHelper', function()
 App::singleton('JsLocalizationCachingService', function()
 {
     return new CachingService;
+});
+
+App::singleton('JsLocalizationOutput', function()
+{
+	return new Output;
 });

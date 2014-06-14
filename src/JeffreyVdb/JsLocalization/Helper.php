@@ -1,5 +1,5 @@
 <?php
-namespace JsLocalization;
+namespace JeffreyVdb\JsLocalization;
 
 use App;
 use Event;

@@ -1,19 +1,18 @@
 <?php
 
-use JsLocalization\Facades\CachingService;
+use JeffreyVdb\JsLocalization\Facades\CachingService;
 
 class JsLocalizationController extends Controller
 {
     
-    public function createJsMessages ()
+    public function createJsMessages ($section)
     {
-        $messages = CachingService::getMessagesJson();
-
         $contents  = 'Lang.setLocale("'.Lang::locale().'");';
+        $messages = CachingService::getMessagesJson($section);
         $contents .= 'Lang.addMessages('.$messages.');';
-
+        
         $lastModified = new DateTime();
-        $lastModified->setTimestamp(CachingService::getLastRefreshTimestamp());
+        $lastModified->setTimestamp(CachingService::getLastRefreshTimestamp($section));
 
         return Response::make($contents)
                 ->header('Content-Type', 'text/javascript')

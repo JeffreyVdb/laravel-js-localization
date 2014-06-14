@@ -1,5 +1,5 @@
 <?php
-namespace JsLocalization;
+namespace JeffreyVdb\JsLocalization;
 
 use App;
 use Artisan;
@@ -7,7 +7,7 @@ use Config;
 use View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\File;
-use JsLocalization\Console\RefreshCommand;
+use JeffreyVdb\JsLocalization\Commands\RefreshCommand;
 
 class JsLocalizationServiceProvider extends ServiceProvider {
 
@@ -25,7 +25,7 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('andywer/js-localization');
+		$this->package('jeffreyvdb/jslocalization');
 		
 		$this->registerNamespaces();
 		$this->registerRefreshCommand();
@@ -38,8 +38,8 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		require __DIR__.'/../bindings.php';
-		require __DIR__.'/../routes.php';
+		require __DIR__.'/../../bindings.php';
+		require __DIR__.'/../../routes.php';
 	}
 
 	/**
@@ -49,18 +49,18 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('js-localization');
+		return array('jslocalization');
 	}
 
 	private function registerNamespaces ()
 	{
-		if (File::isDirectory( app_path().'/config/packages/andywer/js-localization' )) {
-			Config::addNamespace('js-localization', app_path().'/config/packages/andywer/js-localization');
+		if (File::isDirectory( app_path().'/config/packages/jeffreyvdb/jslocalization' )) {
+			Config::addNamespace('jslocalization', app_path().'/config/packages/jeffreyvdb/localization');
 		} else {
-			Config::addNamespace('js-localization', __DIR__.'/../config');
+			Config::addNamespace('jslocalization', __DIR__.'/../../config');
 		}
 
-		View::addNamespace('js-localization', __DIR__.'/../views');
+		View::addNamespace('jslocalization', __DIR__ . '/../../views');
 	}
 
 	/**
@@ -68,12 +68,12 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	private function registerRefreshCommand ()
 	{
-		$this->app['js-localization.refresh'] = $this->app->share(function($app)
+		$this->app['jslocalization.refresh'] = $this->app->share(function($app)
 		{
 			return new RefreshCommand;
 		});
 
-		$this->commands('js-localization.refresh');
+		$this->commands('jslocalization.refresh');
 	}
 
 }

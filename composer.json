@@ -1,16 +1,16 @@
 {
-    "name": "andywer/js-localization",
+    "name": "jeffreyvdb/jslocalization",
     "description": "Laravel package to provide localizations to the Javascript code.",
     "keywords": ["laravel", "javascript", "localization", "translation", "messages"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Andy Wermke",
-            "email": "andy@dev.next-step-software.com"
+            "name": "Jeffrey Vandenborne",
+            "email": "vandenbornejeffrey@gmail.com"
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.4.0",
         "illuminate/support": "4.1.x"
     },
     "require-dev": {
@@ -24,7 +24,7 @@
             "tests/TestCase.php"
         ],
         "psr-0": {
-            "JsLocalization": "src/"
+            "JeffreyVdb\\JsLocalization\\": "src/"
         }
     },
     "extra": {

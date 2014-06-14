@@ -1,5 +1,5 @@
 <?php
-namespace JsLocalization\Facades;
+namespace JeffreyVdb\JsLocalization\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -1,8 +1,8 @@
 <?php
-namespace JsLocalization\Console;
+namespace JeffreyVdb\JsLocalization\Commands;
 
 use Illuminate\Console\Command;
-use JsLocalization\Facades\CachingService;
+use JeffreyVdb\JsLocalization\Facades\CachingService;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -14,7 +14,7 @@ class RefreshCommand extends Command
      *
      * @var string
      */
-    protected $name = 'js-localization:refresh';
+    protected $name = 'jslocalization:refresh';
 
     /**
      * The console command description.
@@ -31,8 +31,18 @@ class RefreshCommand extends Command
     public function fire()
     {
         $this->line('Refreshing the message cache...');
-
-        CachingService::refreshMessageCache();
+        CachingService::refreshMessageCache($this->argument('section'));
     }
 
+    /**
+    * Get the console command arguments.
+    *
+    * @return array
+    */
+    protected function getArguments()
+    {
+        return array(
+            array('section', InputArgument::REQUIRED, 'Name of the export section'),
+        );
+    }
 }
