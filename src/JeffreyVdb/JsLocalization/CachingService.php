@@ -87,6 +87,9 @@ class CachingService
 
         foreach ($keys as $k) {
             $messageKeys = Config::get('jslocalization::export.' . $k);
+            if (! $messageKeys) {
+                continue;
+            }
             $messageKeys = JsLocalizationHelper::resolveMessageKeyArray($messageKeys);
             $allMessages = array_unique(array_merge($messageKeys, $allMessages));
         }
