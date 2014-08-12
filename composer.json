@@ -1,4 +1,5 @@
 {
+    "version": "1.0.1",
     "name": "jeffreyvdb/jslocalization",
     "description": "Laravel package to provide localizations to the Javascript code.",
     "keywords": ["laravel", "javascript", "localization", "translation", "messages"],
