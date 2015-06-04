@@ -49,7 +49,7 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('jslocalization');
+		return ['jslocalization'];
 	}
 
 	private function registerNamespaces ()

@@ -8,7 +8,10 @@ use JeffreyVdb\JsLocalization\Facades\JsLocalizationHelper;
 
 class CachingService
 {
-    
+    protected $cache;
+    protected $app;
+    protected $config;
+
     /**
      * The key used to cache the JSON encoded messages.
      *
@@ -16,9 +19,17 @@ class CachingService
      */
     const CACHE_KEY = 'jslocalization';
 
-    public function getSectionKeyName($section, $v)
+    public function __construct()
     {
-        return self::CACHE_KEY . ':' . $section . ':' . $v;
+        $this->app = app('app');
+        $this->cache = app('cache');
+        $this->config = app('config');
+    }
+
+    public function getSectionKeyName($section, $v, $locale = null)
+    {
+        if ($locale === null) $locale = $this->app->getLocale();
+        return self::CACHE_KEY . ':' . $locale . ':' . $section . ':' . $v;
     }
 
     /**
@@ -27,14 +38,14 @@ class CachingService
      *
      * @return string JSON encoded messages object.
      */
-    public function getMessagesJson ($section)
+    public function getMessagesJson($section)
     {
         $cacheKey = $this->getSectionKeyName($section, 'json');
-        if (!Cache::has($cacheKey)) {
+        if (! $this->cache->has($cacheKey)) {
             $this->refreshMessageCache($section);
         }
-        
-        return Cache::get($cacheKey);
+
+        return $this->cache->get($cacheKey);
     }
 
     /**
@@ -44,7 +55,7 @@ class CachingService
      *
      * @return void
      */
-    public function refreshMessageCache ($section)
+    public function refreshMessageCache($section)
     {
         JsLocalizationHelper::triggerRegisterMessages();
 
@@ -55,7 +66,7 @@ class CachingService
             $translatedMessages[$key] = Lang::get($key);
         }
 
-        Cache::forever($this->getSectionKeyName($section, 'json'), 
+        Cache::forever($this->getSectionKeyName($section, 'json'),
             json_encode($translatedMessages));
         Cache::forever($this->getSectionKeyName($section, 'stamp'), time());
     }
@@ -66,7 +77,7 @@ class CachingService
      *
      * @return UNIX timestamp
      */
-    public function getLastRefreshTimestamp ($section)
+    public function getLastRefreshTimestamp($section)
     {
         return Cache::get($this->getSectionKeyName($section, 'stamp'));
     }
@@ -77,16 +88,16 @@ class CachingService
      *
      * @return array Array of message keys.
      */
-    protected function getMessageKeys ($section)
+    protected function getMessageKeys($section)
     {
         $allMessages = [];
         $keys = [$section];
-        if (Config::get('jslocalization::default') == true && $section !== 'default') {
+        if ($this->config->get('jslocalization::default') == true && $section !== 'default') {
             array_unshift($keys, 'default');
         }
 
         foreach ($keys as $k) {
-            $messageKeys = Config::get('jslocalization::export.' . $k);
+            $messageKeys = $this->config->get('jslocalization::export.' . $k);
             if (! $messageKeys) {
                 continue;
             }
