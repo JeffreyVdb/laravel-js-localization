@@ -11,6 +11,7 @@ class CachingService
     protected $cache;
     protected $app;
     protected $config;
+    protected $lang;
 
     /**
      * The key used to cache the JSON encoded messages.
@@ -24,6 +25,7 @@ class CachingService
         $this->app = app('app');
         $this->cache = app('cache');
         $this->config = app('config');
+        $this->lang = app('translator');
     }
 
     public function getSectionKeyName($section, $v, $locale = null)
@@ -60,15 +62,15 @@ class CachingService
         JsLocalizationHelper::triggerRegisterMessages();
 
         $messageKeys = $this->getMessageKeys($section);
-        $translatedMessages = array();
+        $translatedMessages = [];
 
         foreach ($messageKeys as $key) {
-            $translatedMessages[$key] = Lang::get($key);
+            $translatedMessages[$key] = $this->lang->get($key);
         }
 
-        Cache::forever($this->getSectionKeyName($section, 'json'),
+        $this->cache->forever($this->getSectionKeyName($section, 'json'),
             json_encode($translatedMessages));
-        Cache::forever($this->getSectionKeyName($section, 'stamp'), time());
+        $this->cache->forever($this->getSectionKeyName($section, 'stamp'), time());
     }
 
     /**
@@ -79,7 +81,7 @@ class CachingService
      */
     public function getLastRefreshTimestamp($section)
     {
-        return Cache::get($this->getSectionKeyName($section, 'stamp'));
+        return $this->cache->get($this->getSectionKeyName($section, 'stamp'));
     }
 
     /**

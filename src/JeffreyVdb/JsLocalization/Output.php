@@ -8,10 +8,12 @@ use Lang;
 class Output
 {
 	protected $section;
+    protected $app;
 
 	public function __construct()
 	{
 		$this->section = 'default';
+        $this->app = app('app');
 	}
 
 	public function forSection($section)
@@ -20,18 +22,19 @@ class Output
 		return $this;
 	}
 
-	public function inlineScript()
+	public function inlineScript($withTags = true)
 	{
-		echo '<script type="text/javascript">';
-		echo $this->getScriptContents();
-		echo '</script>';
+        if ($withTags) {
+            return "<script>{$this->getScriptContents()}</script>";
+        }
+        else {
+            return $this->getScriptContents();
+        }
 	}
 
 	private function getScriptContents()
 	{
-        $contents  = 'Lang.setLocale("'.Lang::locale().'");';
         $messages = CachingService::getMessagesJson($this->section);
-        $contents .= 'Lang.addMessages('.$messages.');';
-		return $contents;
+        return 'Lang.setLocale("'. $this->app->getLocale() . '");Lang.addMessages('.$messages.');';
 	}
 }
