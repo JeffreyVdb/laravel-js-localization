@@ -43,11 +43,11 @@ class CachingService
     public function getMessagesJson($section)
     {
         $cacheKey = $this->getSectionKeyName($section, 'json');
-        if (! $this->cache->has($cacheKey)) {
+        if (($cache = $this->cache->get($cacheKey)) === null) {
             $this->refreshMessageCache($section);
         }
 
-        return $this->cache->get($cacheKey);
+        return $cache;
     }
 
     /**
