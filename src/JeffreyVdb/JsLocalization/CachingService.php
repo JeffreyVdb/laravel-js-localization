@@ -94,12 +94,12 @@ class CachingService
     {
         $allMessages = [];
         $keys = [$section];
-        if ($this->config->get('jslocalization::default') == true && $section !== 'default') {
-            array_unshift($keys, 'default');
+        if ($this->config->get('js-localization.default') == true && $section !== 'default') {
+            array_unshift($keys, 'export.default');
         }
 
         foreach ($keys as $k) {
-            $messageKeys = $this->config->get('jslocalization::export.' . $k);
+            $messageKeys = $this->config->get('js-localization.export.' . $k);
             if (! $messageKeys) {
                 continue;
             }

@@ -25,10 +25,24 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('jeffreyvdb/jslocalization');
-		
-		$this->registerNamespaces();
+		//echo 'BOOTING JEFFREYS SHIZZLE';
+		// $this->package('jeffreyvdb/jslocalization');
+		//
+		// $this->registerNamespaces();
 		$this->registerRefreshCommand();
+		$this->publishes([
+			__DIR__.'/../../../public/js/' => public_path('packages/jeffreyvdb/jslocalization/js'),
+		], 'public');
+
+        $this->publishes([
+            __DIR__.'/../../config/config.php' => config_path('js-localization.php')
+        ]);
+
+		$this->mergeConfigFrom(
+			__DIR__.'/../../config/config.php', 'js-localization'
+		);
+
+		$this->loadViewsFrom(__DIR__.'/../views', 'js-localization');
 	}
 
 	/**
@@ -52,16 +66,16 @@ class JsLocalizationServiceProvider extends ServiceProvider {
 		return ['jslocalization'];
 	}
 
-	private function registerNamespaces ()
-	{
-		if (File::isDirectory( app_path().'/config/packages/jeffreyvdb/jslocalization' )) {
-			Config::addNamespace('jslocalization', app_path().'/config/packages/jeffreyvdb/localization');
-		} else {
-			Config::addNamespace('jslocalization', __DIR__.'/../../config');
-		}
-
-		View::addNamespace('jslocalization', __DIR__ . '/../../views');
-	}
+	// private function registerNamespaces ()
+	// {
+	// 	if (File::isDirectory( app_path().'/config/packages/jeffreyvdb/jslocalization' )) {
+	// 		Config::addNamespace('jslocalization', app_path().'/config/packages/jeffreyvdb/localization');
+	// 	} else {
+	// 		Config::addNamespace('jslocalization', __DIR__.'/../../config');
+	// 	}
+	//
+	// 	View::addNamespace('jslocalization', __DIR__ . '/../../views');
+	// }
 
 	/**
 	 * Register js-localization.refresh

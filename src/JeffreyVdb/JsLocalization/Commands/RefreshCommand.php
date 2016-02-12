@@ -22,7 +22,7 @@ class RefreshCommand extends Command
      * @var string
      */
     protected $description = "Refresh message cache after changing the config file";
- 
+
     /**
      * Execute the console command.
      *
